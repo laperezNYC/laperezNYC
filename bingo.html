@@ -143,7 +143,34 @@ function rng(s) {
 }
 
 var CONFETTI_COLORS = ["#185fa5", "#85b7eb", "#3b6d11", "#c0dd97", "#ba7517", "#d4537e", "#7f77dd"];
-var boom = document.getElementById("boom"), celebrated = false, boomTimer;
+var celebrated = false, boomTimer;
+
+var boomCSS = document.createElement("style");
+boomCSS.textContent =
+  ".boom{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden;pointer-events:none}" +
+  ".boom.show{display:flex}" +
+  ".boom.out{animation:fade .6s ease forwards}" +
+  ".boom-text{font-size:clamp(26px,6.5vw,58px);font-weight:700;line-height:1.05;text-align:center;padding:16px 24px;border-radius:16px;background:var(--card);border:2px solid var(--markline);color:var(--markink);box-shadow:0 12px 40px rgba(0,0,0,.18);animation:pop .55s cubic-bezier(.2,1.5,.4,1) both,wob 2.2s ease-in-out .55s infinite}" +
+  ".conf{position:absolute;top:-10vh;width:10px;height:15px;border-radius:2px;animation:fall linear forwards}" +
+  ".cell.hit{animation:flash 1.1s ease-in-out infinite;border-color:var(--markink)}" +
+  "@keyframes pop{0%{transform:scale(.3) rotate(-10deg);opacity:0}65%{transform:scale(1.1) rotate(3deg);opacity:1}85%{transform:scale(.97) rotate(-1.5deg)}100%{transform:scale(1) rotate(0);opacity:1}}" +
+  "@keyframes wob{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}" +
+  "@keyframes fall{to{transform:translateY(120vh) rotate(760deg)}}" +
+  "@keyframes fade{to{opacity:0}}" +
+  "@keyframes flash{0%,100%{background:var(--markbg)}50%{background:var(--markline)}}" +
+  "@media (prefers-reduced-motion:reduce){.boom-text{animation:pop .3s ease both}.conf{display:none}.cell.hit{animation:none}}";
+document.head.appendChild(boomCSS);
+
+var boom = document.getElementById("boom");
+if (!boom) {
+  boom = document.createElement("div");
+  boom.id = "boom";
+  boom.setAttribute("role", "status");
+  boom.setAttribute("aria-live", "polite");
+  boom.innerHTML = '<div class="boom-text">YOU LEARNED THE UNIVERSE, YAY!</div>';
+  document.body.appendChild(boom);
+}
+boom.className = "boom";
 
 function clearConfetti() {
   var old = boom.querySelectorAll(".conf");
@@ -173,7 +200,6 @@ function celebrate() {
     }, 650);
   }, 4500);
 }
-
 function build(s) {
   seed = s;
   var rand = rng(seed), pool = ITEMS.slice();
@@ -248,3 +274,4 @@ build(param && /^\d+$/.test(param) ? parseInt(param, 10) : Math.floor(Math.rando
 </script>
 </body>
 </html>
+if (new URLSearchParams(location.search).get("test") === "1") celebrate();
