@@ -78,7 +78,7 @@
   <div class="bar">
     <button type="button" id="new">Shuffle for a new board</button>
     <button type="button" id="share">Copy link to this exact board</button>
-    <span class="count" id="count">1 of 25 marked</span>
+    <span class="count" id="count">0 of 25 marked</span>
   </div>
   <h2 class="sr">A 5 by 5 bingo grid of meeting happenings with a free centre square.</h2>
   <div class="grid" id="grid"></div>
@@ -214,11 +214,10 @@ function build(s) {
   picks.forEach(function (text, idx) {
     var b = document.createElement("button");
     b.type = "button";
-    b.className = "cell" + (idx === 12 ? " free on" : "");
+    b.className = "cell";
     b.textContent = text;
-    b.setAttribute("aria-pressed", idx === 12 ? "true" : "false");
+    b.setAttribute("aria-pressed", "false");
     b.onclick = function () {
-      if (idx === 12) return;
       marked[idx] = !marked[idx];
       b.classList.toggle("on", !!marked[idx]);
       b.setAttribute("aria-pressed", marked[idx] ? "true" : "false");
