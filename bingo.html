@@ -207,9 +207,8 @@ function build(s) {
     var j = Math.floor(rand() * (i + 1)), t = pool[i];
     pool[i] = pool[j]; pool[j] = t;
   }
-  var picks = pool.slice(0, 24);
-  picks.splice(12, 0, "FREE");
-  marked = { 12: true };
+  var picks = pool.slice(0, 25);
+  marked = {};
   celebrated = false;
   grid.innerHTML = "";
   picks.forEach(function (text, idx) {
@@ -272,7 +271,6 @@ document.getElementById("share").onclick = function () {
 var param = new URLSearchParams(location.search).get("b");
 build(param && /^\d+$/.test(param) ? parseInt(param, 10) : Math.floor(Math.random() * 1e9));
 
-if (new URLSearchParams(location.search).get("test") === "1") celebrate();
 </script>
 </body>
 </html>
